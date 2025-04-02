@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Home Page')">
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+
+<header th:replace="fragments/layout :: header"></header>
+
+<div class="container">
+    <div class="message-display">
+        <h2>Message:</h2>
+        <p th:text="${message.content}">Default message</p>
+    </div>
+    
+    <form th:action="@{/submit}" th:object="${message}" method="post">
+        <div class="form-group">
+            <label for="content">Enter new message:</label>
+            <input type="text" id="content" th:field="*{content}" required>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
+</body>
+</html>

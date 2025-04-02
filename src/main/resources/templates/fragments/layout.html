@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Spring MVC with Thymeleaf</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+
+<header th:fragment="header">
+    <div class="container">
+        <h1>Spring MVC with Thymeleaf</h1>
+        <nav>
+            <a th:href="@{/}">Home</a>
+        </nav>
+    </div>
+</header>
+
+<footer th:fragment="footer">
+    <div class="container">
+        <p>&copy; 2025 Spring MVC Demo</p>
+    </div>
+</footer>
+
+</body>
+</html>
