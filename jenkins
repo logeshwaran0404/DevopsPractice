@@ -30,44 +30,31 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    # Stop the current application if running
-                    if pgrep -f "demo-0.0.1-SNAPSHOT.jar" > /dev/null; then
-                        pkill -f "demo-0.0.1-SNAPSHOT.jar"
-                        echo "Stopped existing application"
-                        sleep 5
-                    fi
-                    
-                    # Start the new version
-                    nohup java -jar target/demo-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
-                    echo "Started new application version"
+                    # Deployment commands here
                 '''
             }
         }
     }
     
     post {
-        success {
-            echo 'Build and deployment successful!'
-        }
         failure {
-            echo 'Build or deployment failed!'
-            
-            // Send email notification on failure
-            emailext (
-                subject: "BUILD FAILED: ${currentBuild.fullDisplayName}",
-                body: """
-                    <p>BUILD FAILED: ${currentBuild.fullDisplayName}</p>
-                    <p>SCM checkout or build process failed</p>
-                    <p>Check the console output at: ${env.BUILD_URL}console</p>
-                    <p>Failed Stage: ${currentBuild.result}</p>
-                """,
-                recipientProviders: [
-                    [$class: 'DevelopersRecipientProvider'],
-                    [$class: 'RequesterRecipientProvider']
-                ],
-                to: 'logeshwaran7129@gmail.com',
-                mimeType: 'text/html'
-            )
+            script {
+                // Get commit author email from Git
+                def commitEmail = sh(script: 'git log -1 --pretty=format:%ae', returnStdout: true).trim()
+                
+                // Send email regardless of user registration status
+                emailext (
+                    subject: "BUILD FAILED: ${currentBuild.fullDisplayName}",
+                    body: """
+                        <p>BUILD FAILED: ${currentBuild.fullDisplayName}</p>
+                        <p>SCM checkout or build process failed</p>
+                        <p>Check the console output at: ${env.BUILD_URL}console</p>
+                        <p>Failed Stage: ${currentBuild.result}</p>
+                    """,
+                    to: "${commitEmail}, logeshwaran7129@gmail.com",
+                    mimeType: 'text/html'
+                )
+            }
         }
         always {
             cleanWs()
