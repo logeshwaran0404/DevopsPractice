@@ -12,7 +12,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("message", new Message("Welcome to Spring MVC with Thymeleaf!"));
+        model.addAttribute("message", new Message("Welcome to Jenkins Spring Boot Pipeline!"));
         return "home";
     }
     
